@@ -1,7 +1,7 @@
 using CompanyEmployees.Extensions;
 using NLog;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.ConfigureCors();
@@ -13,7 +13,7 @@ builder.Services.ConfigureLoggerService();
 
 builder.Services.AddControllers();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
@@ -26,12 +26,12 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.Use(async (context, next) =>
+/*app.Use(async (context, next) =>
 {
     Console.WriteLine($"Logic before executing the next delegate in the Use method");
     await next.Invoke();
     Console.WriteLine($"Logic after executing the next delegate in the Use method");
-});
+});*/
 
 /*app.Run(async context =>
 {
