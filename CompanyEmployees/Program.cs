@@ -1,4 +1,6 @@
 using CompanyEmployees.Extensions;
+using Contracts;
+using Microsoft.AspNetCore.HttpOverrides;
 using NLog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -19,16 +21,21 @@ builder.Services.AddControllers().AddApplicationPart(typeof(CompanyEmployees.Pre
 
 WebApplication app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-    app.UseDeveloperExceptionPage();
-else
+var logger = app.Services.GetRequiredService<ILoggerManager>();
+app.ConfigureExceptionHandler(logger);
+
+if (app.Environment.IsProduction())
     app.UseHsts();
 // Configure the HTTP request pipeline.
-app.UseCors("CorsPolicy");
-
 app.UseHttpsRedirection();
-
+app.UseStaticFiles();
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.All
+});
+app.UseCors("CorsPolicy");
 app.UseAuthorization();
+app.MapControllers();
 
 /*app.Use(async (context, next) =>
 {
@@ -42,7 +49,4 @@ app.UseAuthorization();
     Console.WriteLine($"Writing the response to the client in the Run method");
     await context.Response.WriteAsync("Hello from the middleware component.");
 });*/
-
-app.MapControllers();
-
 app.Run();
