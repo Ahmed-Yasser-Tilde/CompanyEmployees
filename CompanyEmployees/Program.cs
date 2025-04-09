@@ -5,7 +5,6 @@ using NLog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.ConfigureCors();
 
 LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(),
@@ -21,32 +20,19 @@ builder.Services.AddControllers().AddApplicationPart(typeof(CompanyEmployees.Pre
 
 WebApplication app = builder.Build();
 
-var logger = app.Services.GetRequiredService<ILoggerManager>();
-app.ConfigureExceptionHandler(logger);
-
-if (app.Environment.IsProduction())
-    app.UseHsts();
-// Configure the HTTP request pipeline.
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+ILoggerManager logger = app.Services.GetRequiredService<ILoggerManager>();
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.All
 });
+
+app.ConfigureExceptionHandler(logger);
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseCors("CorsPolicy");
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-/*app.Use(async (context, next) =>
-{
-    Console.WriteLine($"Logic before executing the next delegate in the Use method");
-    await next.Invoke();
-    Console.WriteLine($"Logic after executing the next delegate in the Use method");
-});*/
-
-/*app.Run(async context =>
-{
-    Console.WriteLine($"Writing the response to the client in the Run method");
-    await context.Response.WriteAsync("Hello from the middleware component.");
-});*/
 app.Run();
