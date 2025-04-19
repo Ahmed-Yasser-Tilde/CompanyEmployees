@@ -1,4 +1,3 @@
-using CompanyEmployees.ActionFilters;
 using CompanyEmployees.Extensions;
 using CompanyEmployees.Presentation;
 using Contracts;
