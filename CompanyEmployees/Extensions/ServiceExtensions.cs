@@ -15,7 +15,7 @@ namespace CompanyEmployees.Extensions
             {
                 options.AddPolicy("CorsPolicy", builder =>
                 {
-                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().WithExposedHeaders("X-Pagination");
                 });
             });
         }
