@@ -9,7 +9,7 @@ namespace CompanyEmployees.Presentation
         {
             var action = context.RouteData.Values["action"];
             var controller = context.RouteData.Values["controller"];
-            var param = context.ActionDescriptor.Parameters.SingleOrDefault(x => x.Name.ToString().Contains("Dto"));
+            var param = context.ActionDescriptor.Parameters.SingleOrDefault(x => x.ParameterType.Name.ToString().Contains("Dto"));
             if (param is null)
             {
                 if (!context.ModelState.ContainsKey(param.Name))
