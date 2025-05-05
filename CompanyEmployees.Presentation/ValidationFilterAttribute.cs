@@ -12,11 +12,7 @@ namespace CompanyEmployees.Presentation
             var param = context.ActionDescriptor.Parameters.SingleOrDefault(x => x.ParameterType.Name.ToString().Contains("Dto"));
             if (param is null)
             {
-                if (!context.ModelState.ContainsKey(param.Name))
-                {
-                    context.Result = new BadRequestObjectResult(
-                        $"DTO object is required. Controller: {controller}, action: {action}, parameter: {param.Name}");
-                }
+                context.Result = new BadRequestObjectResult($"DTO object is required. Controller: {controller}, action: {action}");
                 return;
             }
             if (!context.ModelState.IsValid)

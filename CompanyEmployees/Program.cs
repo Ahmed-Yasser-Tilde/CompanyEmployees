@@ -25,6 +25,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 builder.Services.AddControllers().AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
 builder.Services.AddAuthentication();
 builder.Services.ConfigureIdentity();
+builder.Services.ConfigureJWT(builder.Configuration);
 
 WebApplication app = builder.Build();
 
